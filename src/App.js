@@ -1,24 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import Router from "./router/Router";
+import { RenderAfterNavermapsLoaded } from "react-naver-maps";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RenderAfterNavermapsLoaded
+      ncpClientId={"12stnddi1j"}
+      error={<p>Maps Load Error</p>}
+      loading={<p>Maps Loading...</p>}
+    >
+      <Router />
+    </RenderAfterNavermapsLoaded>
   );
 }
 
