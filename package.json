@@ -17,6 +17,7 @@
     "react-naver-maps": "^0.0.13",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-simple-hook-modal": "^1.1.0",
     "styled-components": "^5.3.0",
     "web-vitals": "^1.0.1"
   },

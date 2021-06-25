@@ -1,33 +1,53 @@
-import React, {useEffect} from "react";
+import React, {useEffect,useState} from "react";
 import { NaverMap,Polygon } from "react-naver-maps";
 import axios from "axios";
 import { Button } from '@material-ui/core';
+import styled from 'styled-components';
+import Modal from './modal'
+
+const Wrapper = styled.div`
+.react-naver-map{
+  .MuiButtonBase-root.MuiButton-root.MuiButton-contained{
+    z-index:10
+  }
+}
+`
 
 
+
+const Home = () => {
+
+const [isActive, setIsActive] = useState(false);
 
 const testClick =(e)=>{
     console.log(e)
 }
 
-const Home = () => {
+const modalClick =(e)=>{
+  setIsActive(true)
+}
+
+const closeModal =(e)=>{
+  setIsActive(false)
+}
 
 
-    useEffect(()=>{
+useEffect(()=>{
     
-        axios.get(`https://motov-coding-homework.s3.ap-northeast-2.amazonaws.com/country.json`).then(
-            function(response) {
-            console.log(response);
-        })
-        .catch(function(error) {
-            console.log("실패");
-        })
-              
+  axios.get(`https://motov-coding-homework.s3.ap-northeast-2.amazonaws.com/country.json`).then(
+      function(response) {
+      console.log(response);
+  })
+  .catch(function(error) {
+      console.log("실패");
+  })
+        
 
 
-    },[])
+},[])
 
     return (
-        <div>
+        <Wrapper>
         <NaverMap
           mapDivId={process.env.API_KEY} 
           style={{
@@ -57,9 +77,17 @@ const Home = () => {
         strokeOpacity={0.6}
         strokeWeight={3}
       />
-        </NaverMap>
-        <Button variant="contained" onClick={testClick}>테스트</Button>
-        </div>
+        <Button style={{zIndex:10}} variant="contained" onClick={testClick}>폴리곤</Button>
+        <Button style={{zIndex:10}} variant="contained" onClick={modalClick}>팝업</Button>
+        </NaverMap>      
+        {
+        isActive && <Modal
+          visible={isActive}
+          closable={true}
+          maskClosable={true}
+          onClose={closeModal}>Hello</Modal>
+      }
+        </Wrapper>
       );
 };
 
