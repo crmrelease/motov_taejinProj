@@ -1,6 +1,5 @@
-import React, {useEffect,useState} from "react";
+import React, {useState} from "react";
 import { NaverMap,Polygon } from "react-naver-maps";
-import axios from "axios";
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import Modal from './modal'
@@ -69,19 +68,6 @@ const closeModal =(e)=>{
 }
 
 
-useEffect(()=>{
-    
-  axios.get(`https://motov-coding-homework.s3.ap-northeast-2.amazonaws.com/country.json`).then(
-      function(response) {
-      console.log(response);
-  })
-  .catch(function(error) {
-      console.log("실패");
-  })
-        
-
-
-},[])
 
     return (
         <Wrapper>
