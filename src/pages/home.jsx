@@ -4,24 +4,61 @@ import axios from "axios";
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import Modal from './modal'
+import { withStyles } from '@material-ui/core/styles';
+import InputBase from '@material-ui/core/InputBase';
+
+
+const StyledTextField = withStyles({
+  root: {
+    width: '400px',
+    height: '38px',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    marginRight:'10px',
+    boxShadow: '0px 3px 6px #00000033',
+    border: '1px solid #CCCCCC',
+    borderRadius: '5px',
+    opacity: '1',
+    zIndex:'10',
+    marginLeft:'365px'
+  },
+})(InputBase);
+
+const StyledButton = withStyles({
+  root: {
+    width: '100px',
+    height: '38px',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000033',
+    border: '1px solid #CCCCCC',
+    borderRadius: '5px',
+    opacity: '1',
+    zIndex:'10'
+  },
+})(Button);
 
 const Wrapper = styled.div`
-.react-naver-map{
-  .MuiButtonBase-root.MuiButton-root.MuiButton-contained{
-    z-index:10
-  }
-}
+  display: flex;
+  flex-direction: column;
+  width:1920px;
+  height:1200px;
+  opacity:1
+  position: relative
 `
-
+const BarWrapper=styled.div`
+  display: flex;
+  align-items: flex-start;
+  padding-top: 20px;
+  height: 210px;
+  width:1520px;
+  height:1200px;
+  margin-left:340px;
+  margin-right:60px;
+`
 
 
 const Home = () => {
 
 const [isActive, setIsActive] = useState(false);
-
-const testClick =(e)=>{
-    console.log(e)
-}
 
 const modalClick =(e)=>{
   setIsActive(true)
@@ -52,7 +89,7 @@ useEffect(()=>{
           mapDivId={process.env.API_KEY} 
           style={{
             width: '100%', 
-            height: '85vh'
+            height: '95vh'
           }}
           defaultCenter={{ lat: 37.554722, lng: 126.970833 }} 
           defaultZoom={13} 
@@ -77,16 +114,20 @@ useEffect(()=>{
         strokeOpacity={0.6}
         strokeWeight={3}
       />
-        <Button style={{zIndex:10}} variant="contained" onClick={testClick}>폴리곤</Button>
-        <Button style={{zIndex:10}} variant="contained" onClick={modalClick}>팝업</Button>
-        </NaverMap>      
-        {
+            <BarWrapper>
+
+        <StyledTextField />
+        <StyledButton  variant="contained" onClick={modalClick}>지역 설정</StyledButton>
+      </BarWrapper>
+      
+      {
         isActive && <Modal
           visible={isActive}
           closable={true}
           maskClosable={true}
-          onClose={closeModal}>Hello</Modal>
+          onClose={closeModal}/>
       }
+        </NaverMap>              
         </Wrapper>
       );
 };
