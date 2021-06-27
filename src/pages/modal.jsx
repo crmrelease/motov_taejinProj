@@ -127,7 +127,7 @@ const StyledSelect = withStyles({
 
 
 
-const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
+const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, onClose}) =>{
 
   const [geoData,setGeoData]=useState([])
   const [cityList,setCityList]=useState([])
@@ -177,6 +177,7 @@ const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
     
     const close = (e) => {
         if (onClose) {
+          setPolygonFunction(selectPolygon)
           onClose(e)
         }
       }

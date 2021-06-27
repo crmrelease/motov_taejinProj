@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { NaverMap,Polygon } from "react-naver-maps";
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
@@ -67,6 +67,47 @@ const closeModal =(e)=>{
   setIsActive(false)
 }
 
+const rendering=(e)=>{
+  console.log('value',childInputValue.current)//Array
+  if(childInputValue.current){
+    console.log('in If',childInputValue.current)
+    let parsingInput=childInputValue.current.map((key)=>{
+      key.polygon[0].split('_')
+    })
+    console.log('in If',parsingInput)
+  }
+  const result = [];
+  result.push(<Polygon 
+  paths={[
+    [
+      {lat:37.37544345085402, lng:127.11224555969238},
+      {lat:37.37230584065902, lng:127.10791110992432},
+      {lat:37.35975408751081, lng:127.10795402526855},
+      {lat:37.359924641705476, lng:127.11576461791992},
+      {lat:37.35931064479073, lng:127.12211608886719},
+      {lat:37.36043630196386, lng:127.12293148040771},
+      {lat:37.36354029942161, lng:127.12310314178465},
+      {lat:37.365211629488016, lng:127.12456226348876},
+      {lat:37.37544345085402, lng:127.11224555969238}
+    ]
+  ]}
+  fillColor={'#ff0000'}
+  fillOpacity={0.3}
+  strokeColor={'#ff0000'}
+  strokeOpacity={0.6}
+  strokeWeight={3}
+/>)
+
+return result
+
+}
+
+const childInputValue=useRef();
+
+const setPolygonFunction = (inputValue)=>{
+  console.log(inputValue)
+  childInputValue.current=inputValue;
+}
 
 
     return (
@@ -80,26 +121,7 @@ const closeModal =(e)=>{
           defaultCenter={{ lat: 37.554722, lng: 126.970833 }} 
           defaultZoom={13} 
         >
-            <Polygon 
-        paths={[
-          [
-            {lat:37.37544345085402, lng:127.11224555969238},
-            {lat:37.37230584065902, lng:127.10791110992432},
-            {lat:37.35975408751081, lng:127.10795402526855},
-            {lat:37.359924641705476, lng:127.11576461791992},
-            {lat:37.35931064479073, lng:127.12211608886719},
-            {lat:37.36043630196386, lng:127.12293148040771},
-            {lat:37.36354029942161, lng:127.12310314178465},
-            {lat:37.365211629488016, lng:127.12456226348876},
-            {lat:37.37544345085402, lng:127.11224555969238}
-          ]
-        ]}
-        fillColor={'#ff0000'}
-        fillOpacity={0.3}
-        strokeColor={'#ff0000'}
-        strokeOpacity={0.6}
-        strokeWeight={3}
-      />
+           {rendering()}
             <BarWrapper>
 
         <StyledTextField />
@@ -111,7 +133,9 @@ const closeModal =(e)=>{
           visible={isActive}
           closable={true}
           maskClosable={true}
-          onClose={closeModal}/>
+          onClose={closeModal}
+          setPolygonFunction={setPolygonFunction}
+          />
       }
         </NaverMap>              
         </Wrapper>
