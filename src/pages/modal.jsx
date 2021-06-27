@@ -133,6 +133,7 @@ const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
   const [cityList,setCityList]=useState([])
   const [selectCity,setSelectCity]=useState('서울특별시')
   const [selectRegion,setSelectRegion]=useState([])
+  const [selectPolygon,setSelectPolygon]=useState([])
 
   useEffect(()=>{
     
@@ -141,7 +142,7 @@ const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
           let geoDataIndex=[]
           let indexSet= new Set()
           response.data.maps.map(key=>indexSet.add(key.city))
-          setCityList(['시,도 선택',...indexSet])
+          setCityList([...indexSet])
           let cityListArray=[...indexSet]
           cityListArray.map(key=>
             geoDataIndex.push(response.data.maps.filter(elem => elem.city===key))
@@ -160,7 +161,7 @@ const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
   const handleChange=(e)=>{
     setSelectCity(e.target.value)
     let selectCityIndex=e.target.value
-    geoData.map(key=>{
+    geoData.map((key,idx)=>{
       if(key[0].city===selectCityIndex){
         setSelectRegion(key)
       }
@@ -180,9 +181,98 @@ const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
         }
       }
 
+    const isSelected=(e,cur)=>{
+      console.log(cur)
+      let index=selectPolygon.findIndex(key => (key.country ===cur.country&&key.city ===cur.city))
+      if(index===-1){
+        setSelectPolygon([...selectPolygon,cur])
+      }else{
+        selectPolygon.splice(index, 1);
+        setSelectPolygon(selectPolygon)
+      }
+    }
+
+    let labelId
+    const rendering = () => {
+      const result = [];
+      let loopIndex=selectRegion.length
+      if(selectRegion.length%3===1){
+          loopIndex-=1
+      }
+      else if(selectRegion.length%3===2){
+          loopIndex-=2
+      }
+    
+      for(let i = 0; i <loopIndex; i+=3) {
+        result.push(
+        <>
+        <TableRow  role="checkbox" >
+        <TableCell onClick={(e)=>isSelected(e,selectRegion[i])} padding="checkbox" key={selectRegion[i]}>
+        <Checkbox inputProps={{ 'aria-labelledby': labelId }} />
+        </TableCell>
+        <TableCell scope="row" id={labelId} component="th" >
+          {selectRegion[i].country}
+        </TableCell>
+        <TableCell onClick={(e)=>isSelected(e,selectRegion[i+1])} padding="checkbox" key={selectRegion[i+1]}>
+        <Checkbox inputProps={{ 'aria-labelledby': labelId }} />
+        </TableCell>
+        <TableCell scope="row" id={labelId} component="th" >
+          {selectRegion[i+1].country}
+        </TableCell>
+        <TableCell onClick={(e)=>isSelected(e,selectRegion[i+2])} padding="checkbox" key={selectRegion[i+2]}>
+        <Checkbox inputProps={{ 'aria-labelledby': labelId }} />
+        </TableCell>
+        <TableCell scope="row" id={labelId} component="th" >
+          {selectRegion[i+2].country}
+        </TableCell>
+        </TableRow>
+        </>
+      );
+      }
+    
+      if(selectRegion.length%3===1){
+        result.push(
+        <>
+        <TableRow  role="checkbox" >
+        <TableCell onClick={(e)=>isSelected(e,selectRegion[selectRegion.length-1])} padding="checkbox" key={selectRegion[selectRegion.length-1]}>
+        <Checkbox inputProps={{ 'aria-labelledby': labelId }} />
+        </TableCell>
+        <TableCell scope="row" id={labelId} component="th" >
+          {selectRegion[selectRegion.length-1].country}
+        </TableCell>
+        </TableRow>
+        </>
+        )
+      }
+      
+        else if(selectRegion.length%3===2){
+          result.push(
+            <>
+            <TableRow  role="checkbox" >
+            <TableCell onClick={(e)=>isSelected(e,selectRegion[selectRegion.length-2])} padding="checkbox" key={selectRegion[selectRegion.length-2]}>
+            <Checkbox inputProps={{ 'aria-labelledby': labelId }} />
+            </TableCell>
+            <TableCell scope="row" id={labelId} component="th" >
+              {selectRegion[selectRegion.length-2].country}
+            </TableCell>
+            <TableCell onClick={(e)=>isSelected(e,selectRegion[selectRegion.length-1])} padding="checkbox" key={selectRegion[selectRegion.length-1]}>
+            <Checkbox inputProps={{ 'aria-labelledby': labelId }} />
+            </TableCell>
+            <TableCell scope="row" id={labelId} component="th" >
+              {selectRegion[selectRegion.length-1].country}
+            </TableCell>
+            </TableRow>
+            </>
+            )
+      }
+    
+      return result;
+    };
+    
+    
   return (
       <ModalWrapper className={className} onClick={maskClosable ? onMaskClick : null} tabIndex="-1" visible={visible}>
-        {console.log(geoData)}
+        {console.log(selectPolygon)}
         <ModalInner  tabIndex="0" className="modal-inner">
         <MidWrapper1>  
          지역 설정
@@ -194,26 +284,18 @@ const Modal = ({ className, visible,maskClosable ,closable, onClose}) =>{
               })
             }
         </StyledSelect>
-        <StyledButton2/>
-        <StyledButton2/>
+        <StyledButton2>전체선택</StyledButton2>
+        <StyledButton2>선택해제</StyledButton2>
         </MidWrapper2>
+        <Divider/>
         <MidWrapper3>
         <TableContainer component={Paper}>
       <Table aria-label="simple table">
                 <TableBody>
-           {selectRegion.map((key) => (
-            <TableRow key={key.city}>
-              <TableCell padding="checkbox">
-              <Checkbox />
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {key.country}
-              </TableCell>
-            </TableRow>
-          ))} 
-          </TableBody>
-      </Table>
-    </TableContainer>
+        {rendering()}
+         </TableBody>
+        </Table>
+      </TableContainer>
         </MidWrapper3>
         <MidWrapper4>
         </MidWrapper4> 
