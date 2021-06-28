@@ -58,6 +58,8 @@ const BarWrapper=styled.div`
 const Home = () => {
 
 const [isActive, setIsActive] = useState(false);
+let polygonInfo=[]
+//const [polygonInfo, setPolygonInfo] = useState([]);
 
 const modalClick =(e)=>{
   setIsActive(true)
@@ -69,35 +71,33 @@ const closeModal =(e)=>{
 
 const rendering=(e)=>{
   console.log('value',childInputValue.current)//Array
-  if(childInputValue.current){
-    console.log('in If',childInputValue.current)
-    let parsingInput=childInputValue.current.map((key)=>{
-      key.polygon[0].split('_')
+  if(childInputValue.current){ 
+    childInputValue.current.forEach((key)=>{
+        polygonInfo.push(String(key.polygon).split('_'))
     })
-    console.log('in If',parsingInput)
   }
-  const result = [];
-  result.push(<Polygon 
-  paths={[
-    [
-      {lat:37.37544345085402, lng:127.11224555969238},
-      {lat:37.37230584065902, lng:127.10791110992432},
-      {lat:37.35975408751081, lng:127.10795402526855},
-      {lat:37.359924641705476, lng:127.11576461791992},
-      {lat:37.35931064479073, lng:127.12211608886719},
-      {lat:37.36043630196386, lng:127.12293148040771},
-      {lat:37.36354029942161, lng:127.12310314178465},
-      {lat:37.365211629488016, lng:127.12456226348876},
-      {lat:37.37544345085402, lng:127.11224555969238}
-    ]
-  ]}
-  fillColor={'#ff0000'}
-  fillOpacity={0.3}
-  strokeColor={'#ff0000'}
-  strokeOpacity={0.6}
-  strokeWeight={3}
-/>)
 
+  const result = [];
+  
+  polygonInfo.forEach(key=>{
+    let polygonForKey=[]
+    key.forEach(subKey=>{
+        let elemIndex= String(subKey).split(',')
+        polygonForKey.push({lat:Number(elemIndex[1]),lng:Number(elemIndex[0])})
+    })
+    console.log(polygonForKey)
+    result.push(<Polygon 
+      paths={[polygonForKey]}
+      fillColor={'#ff0000'}
+      fillOpacity={0.3}
+      strokeColor={'#ff0000'}
+      strokeOpacity={0.6}
+      strokeWeight={3}
+    />)
+
+  })
+  
+console.log(result)
 return result
 
 }
