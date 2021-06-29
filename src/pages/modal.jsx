@@ -11,11 +11,10 @@ import Checkbox from "@material-ui/core/Checkbox";
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Paper from '@material-ui/core/Paper';
-import TableHead from '@material-ui/core/TableHead';
 import axios from "axios";
-import InputLabel from '@material-ui/core/InputLabel';
 import { Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
@@ -83,7 +82,7 @@ height: 180px;
 display: flex;
 flex-direction: row;
 position: relative;
-margin-top: 50px;
+margin-top: 20px;
 justify-content:center;
 `   
 
@@ -101,7 +100,8 @@ const StyledButton = withStyles({
     height: '36px',
     background: '#008D9B 0% 0% no-repeat padding-box',
     borderRadius: '2px',
-    opacity: '1'
+    opacity: '1',
+    marginBottom:'25px'
   },
 })(Button);
 
@@ -138,6 +138,7 @@ const StyledTable = withStyles({
 const StyledTable2 = withStyles({
   root: {
     boxShadow: "none",
+    maxHeight: '100px'
     },
 })(TableContainer);
 
@@ -191,18 +192,7 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
   },[])
   
 
-  const handleChange=(e)=>{
-    setSelectCity(e.target.value)
-    let selectCityIndex=e.target.value
-    geoData.map((key,idx)=>{
-      if(key[0].city===selectCityIndex){
-        setSelectRegion(key)
-      }
-    }
-    )
-
-
-  }
+  
 
     const onMaskClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -217,9 +207,27 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
         }
       }
 
+    const SelectAllRegion=()=>{
+        setSelectPolygon([...selectRegion])
+      
+      }
+  
+      const CancelAllRegion=()=>{
+        setSelectPolygon([])
+      }
+
+    const handleChange=(e)=>{
+        setSelectCity(e.target.value)
+        let selectCityIndex=e.target.value
+        geoData.map((key,idx)=>{
+          if(key[0].city===selectCityIndex){
+            setSelectRegion(key)
+          }
+        }
+        )
+      }
+
     const isSelected=(e,cur)=>{
-      console.log(e)
-      console.log(cur)
       let index=selectPolygon.findIndex(key => (key.country ===cur.country&&key.city ===cur.city))
       if(index===-1){
         setSelectPolygon([...selectPolygon,cur])
@@ -229,10 +237,15 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
       }
     }
 
-    const checkboxFunc=(e,key)=>{
-      console.log(e.target.checked)
-      console.log(key)
+    const isCanceled=(e,cur)=>{
+      let index=selectPolygon.findIndex(key => (key.country ===cur.country&&key.city ===cur.city))
+      if(index!==-1){
+      selectPolygon.splice(index, 1);
+      setSelectPolygon([...selectPolygon])
+      }
     }
+
+    
 
     let labelId
     const rendering = () => {
@@ -246,26 +259,25 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
       }
     
       if(selectRegion.length===1||selectRegion.length===2){
-        console.log('오니')
       }else{
       for(let i = 0; i <loopIndex; i+=3) {
         result.push(
           <TableBody>
         <TableRow >
-        <StyledCheckedCell id={'check-stay-origin1'} onClick={(e)=>isSelected(e,selectRegion[i])} padding="checkbox" key={selectRegion[i]}>
-        <Checkbox onChange={checkboxFunc} value={selectRegion[i]}/>
+        <StyledCheckedCell id={'check-stay-origin1'} padding="checkbox" >
+        <Checkbox onChange={(e)=>isSelected(e,selectRegion[i])} value={selectRegion[i]}/>
         </StyledCheckedCell>
         <StyledTableCell scope="row" id={labelId} component="th" >
           {selectRegion[i].country}
         </StyledTableCell>
-        <StyledCheckedCell id={'check-stay-origin2'} onClick={(e)=>isSelected(e,selectRegion[i+1])} padding="checkbox" key={selectRegion[i+1]}>
-        <Checkbox  onChange={checkboxFunc} value={selectRegion[i+1]}/>
+        <StyledCheckedCell id={'check-stay-origin2'} padding="checkbox" >
+        <Checkbox  onChange={(e)=>isSelected(e,selectRegion[i+1])} value={selectRegion[i+1]}/>
         </StyledCheckedCell>
         <StyledTableCell scope="row" id={labelId} component="th" >
           {selectRegion[i+1].country}
         </StyledTableCell>
-        <StyledCheckedCell id={'check-stay-origin3'} onClick={(e)=>isSelected(e,selectRegion[i+2])} padding="checkbox" key={selectRegion[i+2]}>
-        <Checkbox  onChange={checkboxFunc} value={selectRegion[i+2]}/>
+        <StyledCheckedCell id={'check-stay-origin3'} padding="checkbox" >
+        <Checkbox  onChange={(e)=>isSelected(e,selectRegion[i+2])} value={selectRegion[i+2]}/>
         </StyledCheckedCell>
         <StyledTableCell scope="row" id={labelId} component="th" >
           {selectRegion[i+2].country}
@@ -280,8 +292,8 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
         result.push(
           <TableBody>
         <TableRow>
-        <StyledCheckedCell id={'check-stay-1-1'} onClick={(e)=>isSelected(e,selectRegion[selectRegion.length-1])} padding="checkbox" key={selectRegion[selectRegion.length-1]}>
-        <Checkbox  onChange={checkboxFunc} key={selectRegion[selectRegion.length-1]}  />
+        <StyledCheckedCell id={'check-stay-1-1'} padding="checkbox" >
+        <Checkbox  onChange={(e)=>isSelected(e,selectRegion[selectRegion.length-1])}  />
         </StyledCheckedCell>
         <StyledTableCell scope="row" id={labelId} component="th" >
           {selectRegion[selectRegion.length-1].country}
@@ -299,14 +311,14 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
           result.push(
             <TableBody>
             <TableRow>
-            <StyledCheckedCell id={'check-stay-2-1'} onClick={(e)=>isSelected(e,selectRegion[selectRegion.length-2])} padding="checkbox" key={selectRegion[selectRegion.length-2]}>
-            <Checkbox  onChange={checkboxFunc} key={selectRegion[selectRegion.length-2]} />
+            <StyledCheckedCell id={'check-stay-2-1'} padding="checkbox" >
+            <Checkbox  onChange={(e)=>isSelected(e,selectRegion[selectRegion.length-2])} />
             </StyledCheckedCell>
             <StyledTableCell scope="row" id={labelId} component="th" >
               {selectRegion[selectRegion.length-2].country}
             </StyledTableCell>
-            <StyledCheckedCell id={'check-stay-2-2'} onClick={(e)=>isSelected(e,selectRegion[selectRegion.length-1])} padding="checkbox" key={selectRegion[selectRegion.length-1]}>
-            <Checkbox  onChange={checkboxFunc} key={selectRegion[selectRegion.length-1]}/>
+            <StyledCheckedCell id={'check-stay-2-2'} padding="checkbox" >
+            <Checkbox onChange={(e)=>isSelected(e,selectRegion[selectRegion.length-1])}/>
             </StyledCheckedCell>
             <StyledTableCell scope="row" id={labelId} component="th" >
               {selectRegion[selectRegion.length-1].country}
@@ -340,15 +352,15 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
           <StyledTableCell scope="row" id={labelId} component="th" >
      {selectPolygon[i].country}
  </StyledTableCell>
- <StyledCancelCell/>
+ <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[i])}><CloseIcon/></StyledCancelCell>
  <StyledTableCell scope="row" id={labelId} component="th" >
      {selectPolygon[i+1].country}
  </StyledTableCell>
- <StyledCancelCell/>
+ <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[i+1].country)}><CloseIcon/></StyledCancelCell>
  <StyledTableCell scope="row" id={labelId} component="th" >
      {selectPolygon[i+2].country}
  </StyledTableCell>
- <StyledCancelCell/>
+ <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[i+2].country)}><CloseIcon/></StyledCancelCell>
  </TableRow>
     </TableBody>
         )
@@ -361,7 +373,7 @@ result.push(<TableBody>
  <StyledTableCell scope="row" id={labelId} component="th" >
      {selectPolygon[selectPolygon.length-1].country}
  </StyledTableCell>
- <StyledCancelCell/>
+ <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[selectPolygon.length-1])}><CloseIcon/></StyledCancelCell>
  <StyledTableCell/>
  <StyledCancelCell/>
  <StyledTableCell/>
@@ -377,11 +389,11 @@ if(selectPolygon.length%3===2){
     <StyledTableCell scope="row" id={labelId} component="th" >
         {selectPolygon[selectPolygon.length-2].country}
     </StyledTableCell>
-    <StyledCancelCell/>
+    <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[selectPolygon.length-2])}><CloseIcon/></StyledCancelCell>
     <StyledTableCell scope="row" id={labelId} component="th" >
         {selectPolygon[selectPolygon.length-1].country}
     </StyledTableCell>
-    <StyledCancelCell/>
+    <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[selectPolygon.length-1])}><CloseIcon/></StyledCancelCell>
     <StyledTableCell/>
     <StyledCancelCell/>
     </TableRow>
@@ -389,14 +401,12 @@ if(selectPolygon.length%3===2){
     )
 }
 
-  console.log('체크',result)
       return result
     }
     
     
   return (
       <ModalWrapper className={className} onClick={maskClosable ? onMaskClick : null} tabIndex="-1" visible={visible}>
-        {console.log('폴리곤',selectPolygon)}
         <ModalInner  tabIndex="0" className="modal-inner">
         <MidWrapper1>  
         <Typography>지역 설정</Typography>
@@ -408,8 +418,8 @@ if(selectPolygon.length%3===2){
               })
             }
         </StyledSelect>
-        <StyledButton2>전체선택</StyledButton2>
-        <StyledButton2>선택해제</StyledButton2>
+        <StyledButton2 onClick={SelectAllRegion}>전체선택</StyledButton2>
+        <StyledButton2 onClick={CancelAllRegion}>전체선택해제</StyledButton2>
         </MidWrapper2>
         <Divider/>
         <MidWrapper3>
