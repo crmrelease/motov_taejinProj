@@ -14,7 +14,7 @@ import TableBody from '@material-ui/core/TableBody';
 import axios from "axios";
 import { Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
@@ -69,7 +69,7 @@ margin-top: 40px;
 
 const MidWrapper3=styled.div`
 width: 800px;
-height: 350px;
+height: 400px;
 display: flex;
 flex-direction: row;
 position: relative;
@@ -146,20 +146,31 @@ const StyledTableCell = withStyles({
   root: {
     width:"216px",
     borderRihgt:'1px solid rgba(224, 224, 224, 1)',
+    height:"20px"
     },
 })(TableCell);
 
 const StyledCheckedCell = withStyles({
   root: {
-    width:"50px"
+    width:"50px",
+    height:"20px"
     },
 })(TableCell);
 
 const StyledCancelCell = withStyles({
   root: {
-    width:"50px"
+    width:"50px",
+    height:"20px"
     },
 })(TableCell);
+
+
+const StyledLoadingSpinner = withStyles({
+  root: {
+    marginTop:"320px"
+    },
+})(CircularProgress);
+
 
 const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, onClose}) =>{
 
@@ -168,6 +179,7 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
   const [selectCity,setSelectCity]=useState('서울특별시')
   const [selectRegion,setSelectRegion]=useState([])
   const [selectPolygon,setSelectPolygon]=useState([])
+  const [loadIndex,setLoadIndex]=useState(true)
 
   useEffect(()=>{
     
@@ -182,6 +194,12 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
             geoDataIndex.push(response.data.maps.filter(elem => elem.city===key))
           )
           setGeoData(geoDataIndex)
+          geoDataIndex.forEach(key=>{
+            if(key[0].city===selectCity){
+              setSelectRegion(key)
+            }
+          })
+          setLoadIndex(false)
     })
     .catch(function(error) {
         console.log("실패");
@@ -329,7 +347,6 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
             </TableBody>
             )
       }
-      console.log(result)
       return result;
     };
 
@@ -408,13 +425,17 @@ if(selectPolygon.length%3===2){
   return (
       <ModalWrapper className={className} onClick={maskClosable ? onMaskClick : null} tabIndex="-1" visible={visible}>
         <ModalInner  tabIndex="0" className="modal-inner">
-        <MidWrapper1>  
+          {console.log(selectRegion)}
+        {loadIndex ? (<StyledLoadingSpinner size={100}/>):
+        (
+          <>
+        <MidWrapper1>
         <Typography>지역 설정</Typography>
         </MidWrapper1>
         <MidWrapper2>
         <StyledSelect onChange={handleChange} native>
         {cityList.map((elem, idx) => {
-                return <option key={idx} value={elem}>{elem}</option>
+                return <option value={elem}>{elem}</option>
               })
             }
         </StyledSelect>
@@ -442,9 +463,12 @@ if(selectPolygon.length%3===2){
         <MidWrapper5>
         {closable && <StyledButton className="modal-close" onClick={close} variant='outlined'>지역 선택 완료</StyledButton>}
         </MidWrapper5>
+        </>
+        )}
         </ModalInner>
       </ModalWrapper>
-  )
+      )
+  
 }
 
 Modal.propTypes = {
