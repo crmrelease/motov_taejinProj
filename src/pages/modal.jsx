@@ -66,6 +66,18 @@ justify-content: space-around;
 position: relative;
 margin-top: 40px;
 `   
+const SubWrapper1=styled.div`
+width: 490px;
+margin-left:20px;
+`
+
+const SubWrapper2=styled.div`
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+width: 310px;
+margin-rignt:80px;
+`
 
 const MidWrapper3=styled.div`
 width: 800px;
@@ -94,6 +106,35 @@ position: relative;
 justify-content:center;
 `   
 
+const StyledTypography=withStyles({
+  root: {
+    textAlign: 'left',
+    font: 'normal normal normal 18px/27px Noto Sans KR Regular',
+    letterSpacing: '0px',
+    color: '#121212',
+    opacity: '1',
+    marginLeft:'10px'
+  },
+})(Typography);
+
+const StyledTypography2=withStyles({
+  root: {
+    
+    marginLeft:'10px'
+  },
+})(Typography);
+
+const StyledTypography3=withStyles({
+  root: {
+    textAlign: 'center',
+    font: 'normal normal normal 14px/20px Noto Sans KR Regular',
+    letterSpacing: '0px',
+    color: '#FFFFFF',
+    opacity: '1',
+  },
+})(Typography);
+
+
 const StyledButton = withStyles({
   root: {
     width: '180px',
@@ -116,6 +157,19 @@ const StyledButton2 = withStyles({
   },
 })(Button);
 
+const StyledButton3 = withStyles({
+  root: {
+    width: '120px',
+    height: '36px',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    borderRadius: '2px',
+    border:'1px solid #BDC3CE',
+    opacity: '1',
+    paddingRight:'2px'
+  },
+})(Button);
+
+
 
 const StyledSelect = withStyles({
   root: {
@@ -131,14 +185,14 @@ const StyledTable = withStyles({
     borderTop: '1px solid rgba(224, 224, 224, 1)',
     borderRihgt:'1px solid rgba(224, 224, 224, 1)',
     borderLeft:'1px solid rgba(224, 224, 224, 1)',
-    maxHeight: '360px'
+    maxHeight: '380px',
     },
 })(TableContainer);
 
 const StyledTable2 = withStyles({
   root: {
     boxShadow: "none",
-    maxHeight: '100px'
+    maxHeight: '100px',
     },
 })(TableContainer);
 
@@ -147,20 +201,43 @@ const StyledTableCell = withStyles({
     width:"216px",
     borderRihgt:'1px solid rgba(224, 224, 224, 1)',
     height:"20px"
+    
     },
 })(TableCell);
 
 const StyledCheckedCell = withStyles({
   root: {
     width:"50px",
-    height:"20px"
+    height:"20px",
+    borderLeft:'1px solid rgba(224, 224, 224, 1)',
+
+    },
+})(TableCell);
+
+const StyledCheckedFirstCell = withStyles({
+  root: {
+    width:"50px",
+    height:"20px",
     },
 })(TableCell);
 
 const StyledCancelCell = withStyles({
   root: {
     width:"50px",
-    height:"20px"
+    height:"20px",
+    padding:"8px",
+    borderTop: '1px solid rgba(224, 224, 224, 1)',
+
+    },
+})(TableCell);
+
+const StyledCancelTbleCell = withStyles({
+  root: {
+    width:"50px",
+    height:"20px",
+    padding:"8px",
+    borderLeft:'1px solid rgba(224, 224, 224, 1)',
+    borderTop: '1px solid rgba(224, 224, 224, 1)',
     },
 })(TableCell);
 
@@ -282,9 +359,9 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
         result.push(
           <TableBody>
         <TableRow >
-        <StyledCheckedCell id={'check-stay-origin1'} padding="checkbox" >
+        <StyledCheckedFirstCell id={'check-stay-origin1'} padding="checkbox" >
         <Checkbox onChange={(e)=>isSelected(e,selectRegion[i])} value={selectRegion[i]}/>
-        </StyledCheckedCell>
+        </StyledCheckedFirstCell>
         <StyledTableCell scope="row" id={labelId} component="th" >
           {selectRegion[i].country}
         </StyledTableCell>
@@ -310,9 +387,9 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
         result.push(
           <TableBody>
         <TableRow>
-        <StyledCheckedCell id={'check-stay-1-1'} padding="checkbox" >
+        <StyledCheckedFirstCell id={'check-stay-1-1'} padding="checkbox" >
         <Checkbox  onChange={(e)=>isSelected(e,selectRegion[selectRegion.length-1])}  />
-        </StyledCheckedCell>
+        </StyledCheckedFirstCell>
         <StyledTableCell scope="row" id={labelId} component="th" >
           {selectRegion[selectRegion.length-1].country}
         </StyledTableCell>
@@ -329,9 +406,9 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
           result.push(
             <TableBody>
             <TableRow>
-            <StyledCheckedCell id={'check-stay-2-1'} padding="checkbox" >
+            <StyledCheckedFirstCell id={'check-stay-2-1'} padding="checkbox" >
             <Checkbox  onChange={(e)=>isSelected(e,selectRegion[selectRegion.length-2])} />
-            </StyledCheckedCell>
+            </StyledCheckedFirstCell>
             <StyledTableCell scope="row" id={labelId} component="th" >
               {selectRegion[selectRegion.length-2].country}
             </StyledTableCell>
@@ -366,17 +443,17 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
         result.push(
           <TableBody>
   <TableRow>
-          <StyledTableCell scope="row" id={labelId} component="th" >
+          <StyledCancelTbleCell scope="row" id={labelId} component="th" >
      {selectPolygon[i].country}
- </StyledTableCell>
+ </StyledCancelTbleCell>
  <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[i])}><CloseIcon/></StyledCancelCell>
- <StyledTableCell scope="row" id={labelId} component="th" >
+ <StyledCancelTbleCell scope="row" id={labelId} component="th" >
      {selectPolygon[i+1].country}
- </StyledTableCell>
+ </StyledCancelTbleCell>
  <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[i+1].country)}><CloseIcon/></StyledCancelCell>
- <StyledTableCell scope="row" id={labelId} component="th" >
+ <StyledCancelTbleCell scope="row" id={labelId} component="th" >
      {selectPolygon[i+2].country}
- </StyledTableCell>
+ </StyledCancelTbleCell>
  <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[i+2].country)}><CloseIcon/></StyledCancelCell>
  </TableRow>
     </TableBody>
@@ -387,13 +464,13 @@ if(selectPolygon.length%3===1){
 
 result.push(<TableBody>
   <TableRow>
- <StyledTableCell scope="row" id={labelId} component="th" >
+ <StyledCancelTbleCell scope="row" id={labelId} component="th" >
      {selectPolygon[selectPolygon.length-1].country}
- </StyledTableCell>
+ </StyledCancelTbleCell>
  <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[selectPolygon.length-1])}><CloseIcon/></StyledCancelCell>
- <StyledTableCell/>
+ <StyledCancelTbleCell/>
  <StyledCancelCell/>
- <StyledTableCell/>
+ <StyledCancelTbleCell/>
  <StyledCancelCell/>
  </TableRow>
     </TableBody>
@@ -403,15 +480,15 @@ result.push(<TableBody>
 if(selectPolygon.length%3===2){
     result.push(<TableBody>
       <TableRow>
-    <StyledTableCell scope="row" id={labelId} component="th" >
+    <StyledCancelTbleCell scope="row" id={labelId} component="th" >
         {selectPolygon[selectPolygon.length-2].country}
-    </StyledTableCell>
+    </StyledCancelTbleCell>
     <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[selectPolygon.length-2])}><CloseIcon/></StyledCancelCell>
-    <StyledTableCell scope="row" id={labelId} component="th" >
+    <StyledCancelTbleCell scope="row" id={labelId} component="th" >
         {selectPolygon[selectPolygon.length-1].country}
-    </StyledTableCell>
+    </StyledCancelTbleCell>
     <StyledCancelCell onClick={(e)=>isCanceled(e,selectPolygon[selectPolygon.length-1])}><CloseIcon/></StyledCancelCell>
-    <StyledTableCell/>
+    <StyledCancelTbleCell/>
     <StyledCancelCell/>
     </TableRow>
         </TableBody>
@@ -425,22 +502,27 @@ if(selectPolygon.length%3===2){
   return (
       <ModalWrapper className={className} onClick={maskClosable ? onMaskClick : null} tabIndex="-1" visible={visible}>
         <ModalInner  tabIndex="0" className="modal-inner">
-          {console.log(selectRegion)}
         {loadIndex ? (<StyledLoadingSpinner size={100}/>):
         (
           <>
         <MidWrapper1>
-        <Typography>지역 설정</Typography>
+        <StyledTypography>지역 설정</StyledTypography>
         </MidWrapper1>
         <MidWrapper2>
+          <SubWrapper1>
         <StyledSelect onChange={handleChange} native>
         {cityList.map((elem, idx) => {
                 return <option value={elem}>{elem}</option>
               })
             }
         </StyledSelect>
-        <StyledButton2 onClick={SelectAllRegion}>전체선택</StyledButton2>
-        <StyledButton2 onClick={CancelAllRegion}>전체선택해제</StyledButton2>
+        </SubWrapper1>
+        <SubWrapper2>
+        <StyledButton2 onClick={SelectAllRegion}>
+          <StyledTypography3>전체선택</StyledTypography3>
+          </StyledButton2>
+        <StyledButton3 onClick={CancelAllRegion}>전체선택해제</StyledButton3>
+        </SubWrapper2>
         </MidWrapper2>
         <Divider/>
         <MidWrapper3>
@@ -451,7 +533,7 @@ if(selectPolygon.length%3===2){
         </StyledTable>
         </MidWrapper3>
         <MidWrapper1>  
-        <Typography>선택 지역</Typography>
+        <StyledTypography2>선택 지역</StyledTypography2>
         </MidWrapper1>
         <MidWrapper4>
           <StyledTable2 >
@@ -461,7 +543,9 @@ if(selectPolygon.length%3===2){
       </StyledTable2>
         </MidWrapper4> 
         <MidWrapper5>
-        {closable && <StyledButton className="modal-close" onClick={close} variant='outlined'>지역 선택 완료</StyledButton>}
+        {closable && <StyledButton className="modal-close" onClick={close} variant='outlined'>
+        <StyledTypography3>지역 선택 완료</StyledTypography3>
+          </StyledButton>}
         </MidWrapper5>
         </>
         )}
