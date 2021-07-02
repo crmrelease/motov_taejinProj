@@ -223,14 +223,12 @@ const Modal = ({ setPolygonFunction, className, visible,maskClosable ,closable, 
         function(response) {
           let geoDataIndex=[]
           let indexSet= new Set()
-          console.log( response.data.maps)
           response.data.maps.map(key=>{
             indexSet.add(key.city)
             indexObject[key.country]=false
           })
           setCityList([...indexSet])
           indexList.push(indexObject)
-          console.log(indexList)
           setIsChecked(indexList)
           let cityListArray=[...indexSet]
           cityListArray.map(key=>

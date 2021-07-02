@@ -34,7 +34,6 @@ const StyledTableCell = withStyles({
 const RenderingSelect = ({selectPolygon,isChecked,setIsChecked,setSelectPolygon,selectRegion,setSelectRegion})=>{
 
     const isSelected=(e,cur)=>{
-        console.log(isChecked)
         let index=selectPolygon.findIndex(key => (key.country ===cur.country&&key.city ===cur.city))
         if(index===-1){
           setSelectPolygon([...selectPolygon,cur])
