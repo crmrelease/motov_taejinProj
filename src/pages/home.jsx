@@ -70,7 +70,6 @@ const closeModal =(e)=>{
 }
 
 const rendering=(e)=>{
-  console.log('value',childInputValue.current)//Array
   if(childInputValue.current){ 
     childInputValue.current.forEach((key)=>{
         polygonInfo.push(String(key.polygon).split('_'))
@@ -85,7 +84,6 @@ const rendering=(e)=>{
         let elemIndex= String(subKey).split(',')
         polygonForKey.push({lat:Number(elemIndex[1]),lng:Number(elemIndex[0])})
     })
-    console.log(polygonForKey)
     result.push(<Polygon 
       paths={[polygonForKey]}
       fillColor={'#ff0000'}
@@ -97,7 +95,6 @@ const rendering=(e)=>{
 
   })
   
-console.log(result)
 return result
 
 }
@@ -105,7 +102,6 @@ return result
 const childInputValue=useRef();
 
 const setPolygonFunction = (inputValue)=>{
-  console.log(inputValue)
   childInputValue.current=inputValue;
 }
 
@@ -131,9 +127,9 @@ const setPolygonFunction = (inputValue)=>{
       {
         isActive && <Modal
           visible={isActive}
-          closable={true}
-          maskClosable={true}
-          onClose={closeModal}
+          //closable={true}
+          //maskClosable={true}
+         onClose={closeModal}
           setPolygonFunction={setPolygonFunction}
           />
       }
